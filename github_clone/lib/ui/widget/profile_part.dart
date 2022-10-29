@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:github_clone/core/widget/app_app_bar.dart';
 
-import '../../../core/constans.dart';
+import '../../../core/constants.dart';
 
-const _imageUrl = 'https://github.com/mojombo?tab=repositories';
 
 class ProfilePart extends StatelessWidget {
   const ProfilePart({Key? key}) : super(key: key);
@@ -12,11 +11,13 @@ class ProfilePart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        dividerH(),
         Container(
-          width: screenWidth(context),
+          width:100,
+          height: 100,
           decoration: BoxDecoration(
             image: const DecorationImage(
-              image: NetworkImage(_imageUrl),
+              image: AssetImage(icProfile),
               fit: BoxFit.cover,
             ),
             borderRadius: BorderRadius.circular(8),
@@ -25,7 +26,14 @@ class ProfilePart extends StatelessWidget {
         // space widget
         dividerSH(),
         //Text Widget
-        appTextView(name: 'msnmusin', isBold: true, size: 17),
+        Center(
+            child: appTextView(
+          name: 'msnmusin',
+          isBold: true,
+          size: 17,
+        ),),
+        dividerH(),
+        appTextView(name:'')
 
 
       ],
