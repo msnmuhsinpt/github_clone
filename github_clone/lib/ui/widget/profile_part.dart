@@ -3,9 +3,14 @@ import 'package:github_clone/core/widget/app_app_bar.dart';
 
 import '../../../core/constants.dart';
 
-
 class ProfilePart extends StatelessWidget {
-  const ProfilePart({Key? key}) : super(key: key);
+  const ProfilePart({
+    Key? key,
+    required this.imageUrl,
+    required this.userName,
+  }) : super(key: key);
+  final String imageUrl;
+  final String userName;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +18,7 @@ class ProfilePart extends StatelessWidget {
       children: [
         dividerH(),
         Container(
-          width:100,
+          width: 100,
           height: 100,
           decoration: BoxDecoration(
             image: const DecorationImage(
@@ -27,15 +32,14 @@ class ProfilePart extends StatelessWidget {
         dividerSH(),
         //Text Widget
         Center(
-            child: appTextView(
-          name: 'msnmusin',
-          isBold: true,
-          size: 17,
-        ),),
+          child: appTextView(
+            name: 'msnmusin',
+            isBold: true,
+            size: 17,
+          ),
+        ),
         dividerH(),
-        appTextView(name:'')
-
-
+        appTextView(name: '')
       ],
     );
   }

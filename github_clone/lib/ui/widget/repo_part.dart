@@ -3,7 +3,11 @@ import 'package:github_clone/core/constants.dart';
 import 'package:github_clone/core/widget/app_app_bar.dart';
 
 class RepoPart extends StatelessWidget {
-  const RepoPart({Key? key}) : super(key: key);
+  const RepoPart({Key? key, required this.itemCount, required this.repoName})
+      : super(key: key);
+
+  final int itemCount;
+  final String repoName;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +17,7 @@ class RepoPart extends StatelessWidget {
           child: ListView.separated(
             shrinkWrap: true,
             physics: const ClampingScrollPhysics(),
-            itemCount: 14,
+            itemCount: itemCount,
             itemBuilder: (context, index) => repoCard(),
             separatorBuilder: (context, index) => dividerSH(),
           ),
@@ -32,7 +36,8 @@ class RepoPart extends StatelessWidget {
             side: const BorderSide(width: 0.5),
           ),
           child: Center(
-              child: appTextView(name: 'Repository', isBold: true, size: 18)),
+            child: appTextView(name: repoName, isBold: true, size: 18),
+          ),
         ),
       ),
       onTap: () {},
