@@ -6,11 +6,11 @@ import '../../../core/constants.dart';
 class ProfilePart extends StatelessWidget {
   const ProfilePart({
     Key? key,
-    required this.imageUrl,
-    required this.userName,
+    required this.searchedName,
+
   }) : super(key: key);
-  final String imageUrl;
-  final String userName;
+  final String searchedName;
+
 
   @override
   Widget build(BuildContext context) {

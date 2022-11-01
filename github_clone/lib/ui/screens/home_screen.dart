@@ -1,13 +1,18 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:github_clone/core/constants.dart';
-import 'package:github_clone/ui/bloc/github_bloc/github_bloc.dart';
 import '../../core/app_color.dart';
 import '../../core/widget/app_app_bar.dart';
 import '../../data/model/search_model.dart';
-import '../../data/service/api_service.dart';
 import '../widget/profile_part.dart';
 import '../widget/repo_part.dart';
+
+//search
+bool isSearch = false;
+String searchName = '';
+TextEditingController searchController = TextEditingController();
+List<SearchModel> searchModel = [];
+List<SearchModel> tempSearchModelList = [];
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -17,72 +22,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  //bloc
-  late GithubBloc githubBloc;
-
-  //search
-  bool isSearch = false;
-  TextEditingController searchController = TextEditingController();
-  List<SearchModel> searchModel = [];
-  List<SearchModel> tempSearchModelList = [];
-
-  //test
-  String name = ' msnmuhsin';
-  String repo = 'Amazon';
-
-  onItemChanged(String value) {
-    if (value == "") {
-      setState(() {
-        isSearch = false;
-        tempSearchModelList.clear();
-      });
-    } else {
-      setState(() {
-        isSearch = true;
-        tempSearchModelList = searchModel
-            .where((SearchModel data) =>
-                data.name.toLowerCase().contains(value.toLowerCase()))
-            .toList();
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    githubBloc = GithubBloc(RepositoryProvider.of<APIService>(context));
-  }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       animationDuration: const Duration(microseconds: 1000),
       initialIndex: 0,
-      child: RepositoryProvider(
-        create: (context) => githubBloc,
-        child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(100),
-            child: BlocListener<GithubBloc, GitHubState>(
-                listener: (context, state) {
-                  if (state is ProfileLoadedState) {
-
-                    searchModel.add(
-                        SearchModel(name: state.response.login.toString()));
-                  }
-                },
-                child: homeSearchBar()),
-          ),
-          body: TabBarView(
-            children: [
-              ProfilePart(
-                imageUrl: icProfile,
-                userName: name,
-              ),
-              RepoPart(itemCount: 3, repoName: repo),
-            ],
-          ),
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(100),
+          child: homeSearchBar(),
+        ),
+        body: TabBarView(
+          children: [
+            ProfilePart(
+              searchedName: searchController.text.toString(),
+            ),
+            RepoPart(searchedName: searchController.text.toString()),
+          ],
         ),
       ),
     );
@@ -97,9 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onChanged: (value) {
             //data fetch
             onItemChanged(value);
-            setState(() {
-              githubBloc.add(ProfileApiEvent(searchController.text.toString()));
-            });
+            log('Name>>>${searchController.text}');
           },
           decoration: InputDecoration(
             fillColor: aWhite,
@@ -152,17 +107,36 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  onItemChanged(String value) {
+    if (value == "") {
+      setState(() {
+        isSearch = false;
+        tempSearchModelList.clear();
+      });
+    } else {
+      setState(() {
+        isSearch = true;
+        tempSearchModelList = searchModel
+            .where((SearchModel data) =>
+                data.name.toLowerCase().contains(value.toLowerCase()))
+            .toList();
+      });
+    }
+  }
+
   ///search
   clearSearch() {
     setState(() {
       searchController.clear();
       isSearch = false;
     });
+
   }
 
   doSearch() {
     setState(() {
       onItemChanged(searchController.text.toString());
+
     });
   }
 }
